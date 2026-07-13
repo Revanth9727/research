@@ -1,0 +1,63 @@
+============================================================
+v0a Run Commands — Research Project
+============================================================
+Run these in order from /Users/revanthgollapudi/Desktop/Research/
+Always activate the venv first.
+
+------------------------------------------------------------
+STEP 0: Activate venv and set HF token (run before everything else)
+------------------------------------------------------------
+source .venv/bin/activate
+export HF_TOKEN=<paste_your_token_here>
+
+
+------------------------------------------------------------
+STEP 1: Verify dataset and imports are clean
+------------------------------------------------------------
+python3 load_data.py
+python3 scoring.py
+python3 build_messages.py
+python3 inject_faults.py
+
+------------------------------------------------------------
+STEP 2: Smoke-test the reader model
+(downloads the model on first run — ~15 GB, takes a few minutes)
+------------------------------------------------------------
+python3 reader.py
+
+
+------------------------------------------------------------
+STEP 3: Run the full v0a experiment
+(~240 reader calls — takes time depending on model/hardware)
+------------------------------------------------------------
+python3 run_v0a.py
+
+
+------------------------------------------------------------
+STEP 4: Analyze results
+------------------------------------------------------------
+python3 analyze_results.py
+
+
+------------------------------------------------------------
+NOTES
+------------------------------------------------------------
+- All outputs land in results/
+    results/results_v0a.csv
+    results/traces_v0a.jsonl
+    results/run_manifest_v0a_<run_id>.json
+
+- If run_v0a.py exits with code 1, v0a failed the gate.
+  Run analyze_results.py to see which examples failed and why.
+
+- If you want to re-run with a different model, change MODEL_NAME
+  in reader.py and delete the old manifest before re-running.
+
+- reader.py currently points to: Qwen/Qwen2.5-7B-Instruct
+  Smaller alternatives if 7B is too slow:
+    Qwen/Qwen2.5-3B-Instruct   (~6 GB)
+    Qwen/Qwen2.5-1.5B-Instruct (~3 GB)
+
+- Do NOT run baselines.py or run_v0b.py yet.
+  Those are for v0b, which only starts after v0a passes.
+============================================================
