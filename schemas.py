@@ -83,11 +83,15 @@ def validate_example(ex: dict) -> None:
 
     # 3. fault_agent must be a known value
     fa = ex["fault_agent"]
-    if fa not in VALID_FAULT_AGENTS:
-        raise _err(ex_id, f"invalid fault_agent: {fa!r} (must be 1 or 2)")
+    if ft in ("clean", "benign_compression"):
+        if fa is not None and fa not in VALID_FAULT_AGENTS:
+            raise _err(ex_id, f"invalid fault_agent: {fa!r} (must be 1, 2, or null)")
+    else:
+        if fa not in VALID_FAULT_AGENTS:
+            raise _err(ex_id, f"invalid fault_agent: {fa!r} (must be 1 or 2 for {ft})")
 
     # 4. expected_fault_handoff matches the (fault_type, fault_agent) rule
-    want = expected_handoff(ft, fa)
+    want = expected_handoff(ft, fa if fa is not None else 2)
     if ex["expected_fault_handoff"] != want:
         raise _err(
             ex_id,

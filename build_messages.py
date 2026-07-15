@@ -94,7 +94,7 @@ def build_v0b_messages(example: dict) -> dict:
     """
     from inject_faults import inject_fault, inject_into_m1
 
-    fa = example["fault_agent"]
+    fa = example["fault_agent"]  # may be None for clean controls
     ft = example["fault_type"]
 
     evidence_msg = build_evidence_message(example)
