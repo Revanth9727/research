@@ -1,0 +1,26 @@
+id,fault_type,fault_agent,answer,corrupted_answer,R_evidence,R_m1,R_m2,R_final,reader_stability_evidence,reader_stability_m1,reader_stability_m2,reader_stability_final,predicted_handoff,expected_fault_handoff,correct_localization,baseline_blame_last,baseline_blame_random,baseline_blame_longest,baseline_blame_shortest,drop_agent1_to_agent2,drop_agent2_to_agent3,drop_agent3_final_output,R_corrupt_m2,R_corrupt_final,pass_fail
+ex_b01,destructive_deletion,1,1971,,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,,,pass
+ex_b02,destructive_deletion,1,2004,,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,,,pass
+ex_b03,destructive_deletion,1,Halbrook,,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,,,pass
+ex_b04,destructive_deletion,1,Skerry,,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,,,pass
+ex_b05,destructive_deletion,1,1996,,1,0,0,0,2/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,,,pass
+ex_b06,corruption,1,1968,1982,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,1,1,pass
+ex_b07,corruption,1,Renwick College,Ashgate College,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,1,1,pass
+ex_b08,corruption,1,Denmoor,Wexbridge,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,1,1,pass
+ex_b09,corruption,1,2009,2015,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,1,1,pass
+ex_b10,corruption,1,2012,2007,1,0,0,0,3/3,0/3,0/3,0/3,agent1_to_agent2,agent1_to_agent2,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,1,0,0,1,1,pass
+ex_b11,destructive_deletion,2,1974,,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent2_to_agent3,0,1,0,,,pass
+ex_b12,destructive_deletion,2,Pell,,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent2_to_agent3,0,1,0,,,pass
+ex_b13,destructive_deletion,2,2018,,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent2_to_agent3,0,1,0,,,pass
+ex_b14,destructive_deletion,2,Kellow School,,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent2_to_agent3,0,1,0,,,pass
+ex_b15,destructive_deletion,2,1980,,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent2_to_agent3,0,1,0,,,pass
+ex_b16,corruption,2,2003,1999,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,0,1,0,1,1,pass
+ex_b17,corruption,2,Groft,Marlow,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent2_to_agent3,agent1_to_agent2,0,1,0,1,1,pass
+ex_b18,corruption,2,2010,2016,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,0,1,0,1,1,pass
+ex_b19,corruption,2,Brame Academy,Sennet Academy,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent2_to_agent3,agent1_to_agent2,0,1,0,1,1,pass
+ex_b20,corruption,2,1965,1973,1,1,0,0,3/3,3/3,0/3,0/3,agent2_to_agent3,agent2_to_agent3,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,0,1,0,1,1,pass
+ex_b21,clean,,1990,,1,1,1,1,3/3,3/3,3/3,3/3,none,none,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,0,0,0,,,pass
+ex_b22,clean,,Tarn,,1,1,1,1,3/3,3/3,3/3,3/3,none,none,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,0,0,0,,,pass
+ex_b23,clean,,2001,,1,1,1,1,3/3,3/3,3/3,3/3,none,none,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,0,0,0,,,pass
+ex_b24,clean,,Craye,,1,1,1,1,3/3,3/3,3/3,3/3,none,none,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,0,0,0,,,pass
+ex_b25,clean,,1977,,1,1,1,1,3/3,3/3,3/3,3/3,none,none,1,agent2_to_agent3,agent3_final_output,agent1_to_agent2,agent1_to_agent2,0,0,0,,,pass

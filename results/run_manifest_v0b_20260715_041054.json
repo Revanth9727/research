@@ -1,0 +1,14 @@
+{
+  "reader_model": "Qwen/Qwen2.5-7B-Instruct",
+  "reader_prompt_version": "v1",
+  "decoding_config": {
+    "max_new_tokens": 50,
+    "do_sample": false
+  },
+  "num_prompts": 3,
+  "dataset_file": "/home/azureuser/research/v0b_examples.jsonl",
+  "dataset_hash": "d1aac89713519036",
+  "scoring_version": "v2_bridge",
+  "run_id": "20260715_041054",
+  "timestamp": "2026-07-15T04:10:54.864953"
+}
