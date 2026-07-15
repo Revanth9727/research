@@ -13,9 +13,7 @@ v0b mode: full curve R(evidence)->R(m1)->R(m2)->R(final); argmax drop predicts
 
 from __future__ import annotations
 
-from scoring import score_answer
-
-SCORING_VERSION = "v1"
+from scoring import score_answer, SCORING_VERSION
 
 V0B_HANDOFFS = ["agent1_to_agent2", "agent2_to_agent3", "agent3_final_output"]
 

@@ -7,9 +7,6 @@ __pycache__/
 # Hugging Face model cache
 .cache/
 
-# Results (large files, run-specific)
-results/
-
 # Secrets — never commit
 .env
 *.token
