@@ -58,6 +58,52 @@ NOTES
     Qwen/Qwen2.5-3B-Instruct   (~6 GB)
     Qwen/Qwen2.5-1.5B-Instruct (~3 GB)
 
-- Do NOT run baselines.py or run_v0b.py yet.
-  Those are for v0b, which only starts after v0a passes.
+============================================================
+v0b Run Commands
+============================================================
+Run these only after v0a has passed its gate and the dataset
+v0b_examples.jsonl is present in the repo root.
+
+------------------------------------------------------------
+STEP 0: Activate venv (same as v0a)
+------------------------------------------------------------
+source .venv/bin/activate
+export HF_TOKEN=<paste_your_token_here>
+
+
+------------------------------------------------------------
+STEP 1: Validate the v0b dataset
+------------------------------------------------------------
+python3 load_data.py v0b_examples.jsonl
+
+
+------------------------------------------------------------
+STEP 2: Run the full v0b experiment
+(~400 reader calls — evidence + m1 + m2 + m3 × 3 prompts × 25 examples)
+------------------------------------------------------------
+python3 run_v0b.py
+
+
+------------------------------------------------------------
+STEP 3: Analyze results and check gate
+------------------------------------------------------------
+python3 analyze_v0b.py
+
+
+------------------------------------------------------------
+NOTES
+------------------------------------------------------------
+- All outputs land in results/
+    results/results_v0b.csv
+    results/traces_v0b.jsonl
+    results/run_manifest_v0b_<run_id>.json
+
+- run_v0b.py prints the gate verdict inline at the end of the run.
+  analyze_v0b.py re-reads the CSV and prints the full breakdown.
+
+- If run_v0b.py exits with code 1, v0b failed the gate.
+  Run analyze_v0b.py to see which examples failed and the baseline comparison.
+
+- The reader model is the same frozen Qwen/Qwen2.5-7B-Instruct used in v0a.
+  Do not change it between v0a and v0b — results must be comparable.
 ============================================================

@@ -71,6 +71,48 @@ def inject_fault(m2_clean: dict, example: dict) -> dict:
     raise AssertionError(f"unhandled fault_type: {ft!r}")
 
 
+def inject_into_m1(m1_clean: dict, example: dict) -> dict:
+    """
+    Apply the fault specified by example to m1_clean (Agent 1's output).
+    Only called for fault_agent == 1 examples. Returns m1_faulted as a new
+    dict; m1_clean is never mutated.
+
+    Supports destructive_deletion and corruption only — benign_compression
+    and clean are not valid Agent-1 fault types in v0b.
+    """
+    ft = example["fault_type"]
+    if ft not in VALID_FAULT_TYPES:
+        raise ValueError(f"Unknown fault_type: {ft!r}")
+
+    m1 = copy.deepcopy(m1_clean)
+
+    if ft == "destructive_deletion":
+        delete = example["delete_fact"]
+        before = len(m1["known_facts"])
+        m1["known_facts"] = [f for f in m1["known_facts"] if f != delete]
+        if len(m1["known_facts"]) == before:
+            raise ValueError(f"delete_fact was not found in m1 known_facts: {delete!r}")
+        return m1
+
+    if ft == "corruption":
+        corrupt_fact = example["corrupt_fact"]
+        replacement = example["corrupt_replacement"]
+        replaced = False
+        new_facts = []
+        for f in m1["known_facts"]:
+            if f == corrupt_fact:
+                new_facts.append(replacement)
+                replaced = True
+            else:
+                new_facts.append(f)
+        if not replaced:
+            raise ValueError(f"corrupt_fact was not found in m1 known_facts: {corrupt_fact!r}")
+        m1["known_facts"] = new_facts
+        return m1
+
+    raise ValueError(f"inject_into_m1 does not support fault_type {ft!r}")
+
+
 def _print_trace(example: dict, m2_clean: dict, m2_faulted: dict) -> None:
     ft = example["fault_type"]
     print(f"id            : {example['id']}")

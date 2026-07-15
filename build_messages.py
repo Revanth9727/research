@@ -63,6 +63,67 @@ def build_clean_messages(example: dict) -> tuple[dict, dict]:
     return m1, m2_clean
 
 
+def build_evidence_message(example: dict) -> dict:
+    """
+    Build the evidence message — the curve's R(evidence) starting point.
+    Contains all evidence facts exactly as given, before any agent touches them.
+    """
+    return {
+        "known_facts": list(example["evidence"]),
+        "reasoning_summary": "",
+        "answer_candidate": "",
+    }
+
+
+def build_v0b_messages(example: dict) -> dict:
+    """
+    Build all messages needed for the v0b retention curve for one example.
+
+    Fault routing:
+      fault_agent == 1 → inject into m1; m2 and m3 carry the fault forward.
+      fault_agent == 2 → m1 is clean; inject into m2; m3 carries forward.
+      clean / benign_compression → no injection at any step.
+
+    Returns a dict with keys:
+      evidence_msg  — raw evidence (curve start)
+      m1            — Agent 1 output (possibly faulted)
+      m1_clean      — always-clean m1 (for traces)
+      m2            — Agent 2 output (possibly faulted)
+      m2_clean      — always-clean m2 (for traces)
+      m3            — Agent 3 output built from the post-fault m2
+    """
+    from inject_faults import inject_fault, inject_into_m1
+
+    fa = example["fault_agent"]
+    ft = example["fault_type"]
+
+    evidence_msg = build_evidence_message(example)
+    m1_clean = build_m1(example)
+
+    if fa == 1 and ft not in ("clean", "benign_compression"):
+        m1 = inject_into_m1(m1_clean, example)
+    else:
+        m1 = m1_clean
+
+    m2_clean = build_m2_clean(m1)
+
+    if fa == 2 and ft not in ("clean", "benign_compression"):
+        m2 = inject_fault(m2_clean, example)
+    else:
+        m2 = m2_clean
+
+    m3 = build_m3(m2)
+
+    return {
+        "evidence_msg": evidence_msg,
+        "m1":           m1,
+        "m1_clean":     m1_clean,
+        "m2":           m2,
+        "m2_clean":     m2_clean,
+        "m3":           m3,
+    }
+
+
 def _print_trace(example: dict) -> None:
     m1, m2_clean = build_clean_messages(example)
     print(f"id          : {example['id']}")

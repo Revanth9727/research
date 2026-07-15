@@ -31,13 +31,28 @@ VALID_FAULT_TYPES = {
     "corruption",
 }
 
-# fault_type -> allowed expected_fault_handoff
-EXPECTED_HANDOFF = {
-    "clean": "none",
-    "benign_compression": "none",
-    "destructive_deletion": "agent2_to_agent3",
-    "corruption": "agent2_to_agent3",
-}
+VALID_FAULT_AGENTS = {1, 2}
+
+# Handoff labels used by v0b.
+HANDOFF_LABELS = [
+    "agent1_to_agent2",
+    "agent2_to_agent3",
+]
+
+
+def expected_handoff(fault_type: str, fault_agent: int) -> str:
+    """Return the expected_fault_handoff for a given fault_type and fault_agent.
+
+    clean / benign_compression always map to 'none' — no information lost.
+    deletion / corruption map to the handoff produced by the faulted agent.
+    """
+    if fault_type in ("clean", "benign_compression"):
+        return "none"
+    if fault_agent == 1:
+        return "agent1_to_agent2"
+    if fault_agent == 2:
+        return "agent2_to_agent3"
+    raise ValueError(f"Unhandled fault_agent={fault_agent!r} for fault_type={fault_type!r}")
 
 
 class SchemaError(ValueError):
@@ -66,16 +81,22 @@ def validate_example(ex: dict) -> None:
     if ft not in VALID_FAULT_TYPES:
         raise _err(ex_id, f"invalid fault_type: {ft!r}")
 
-    # 3. expected_fault_handoff matches the fault_type rule
-    want = EXPECTED_HANDOFF[ft]
+    # 3. fault_agent must be a known value
+    fa = ex["fault_agent"]
+    if fa not in VALID_FAULT_AGENTS:
+        raise _err(ex_id, f"invalid fault_agent: {fa!r} (must be 1 or 2)")
+
+    # 4. expected_fault_handoff matches the (fault_type, fault_agent) rule
+    want = expected_handoff(ft, fa)
     if ex["expected_fault_handoff"] != want:
         raise _err(
             ex_id,
-            f"expected_fault_handoff should be {want!r} for {ft}, "
+            f"expected_fault_handoff should be {want!r} for "
+            f"fault_type={ft!r} fault_agent={fa}, "
             f"got {ex['expected_fault_handoff']!r}",
         )
 
-    # 4. basic type / non-empty checks
+    # 5. basic type / non-empty checks
     for list_field in ("evidence", "needed_facts", "irrelevant_facts"):
         if not isinstance(ex[list_field], list):
             raise _err(ex_id, f"{list_field} must be a list")
@@ -88,7 +109,7 @@ def validate_example(ex: dict) -> None:
     if set(ex["needed_facts"]) | set(ex["irrelevant_facts"]) != set(ex["evidence"]):
         raise _err(ex_id, "needed_facts + irrelevant_facts do not equal evidence")
 
-    # 5. fault-type-specific requirements
+    # 6. fault-type-specific requirements
     if ft == "destructive_deletion":
         if not ex["delete_fact"]:
             raise _err(ex_id, "deletion row missing delete_fact")

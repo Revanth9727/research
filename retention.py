@@ -83,21 +83,34 @@ def compute_pass_fail(row: dict) -> str:
 
 def compute_v0b_curve(scores: dict[str, int]) -> dict:
     """
-    Stub for v0b: compute the retention curve and predict the fault handoff.
+    Compute the v0b retention curve and predict the fault handoff.
 
     scores: {"R_evidence": int, "R_m1": int, "R_m2": int, "R_final": int}
-    Returns the handoff with the largest single-step drop.
-    Built now; exercised in run_v0b.py after v0a passes.
+
+    Prediction rule — first-transition:
+      Walk the curve in order: evidence → m1 → m2 → final.
+      Predict the handoff at the FIRST adjacent step where R goes from 1 to 0.
+      If no step drops 1→0 (flat curve, e.g. clean controls), predict "none".
+
+    Rationale: once information is lost (R=0), it stays lost downstream.
+    The first 1→0 transition is the causal origin of the fault; a later
+    drop is merely the fault propagating, not a new fault location.
     """
     ordered = [
         ("agent1_to_agent2",    scores.get("R_evidence", 1), scores.get("R_m1", 1)),
         ("agent2_to_agent3",    scores.get("R_m1", 1),       scores.get("R_m2", 1)),
         ("agent3_final_output", scores.get("R_m2", 1),       scores.get("R_final", 1)),
     ]
-    drops = [(label, before - after) for label, before, after in ordered]
-    predicted = max(drops, key=lambda x: x[1])[0]
+    drops = {label: before - after for label, before, after in ordered}
+
+    predicted = "none"
+    for label, before, after in ordered:
+        if before == 1 and after == 0:
+            predicted = label
+            break
+
     return {
-        "curve": {label: after for label, _, after in ordered},
-        "drops": {label: d for label, d in drops},
+        "curve":                   {label: after for label, _, after in ordered},
+        "drops":                   drops,
         "predicted_fault_handoff": predicted,
     }
